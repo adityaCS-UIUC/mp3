@@ -95,7 +95,7 @@ router.delete('/:id', async (req, res) => {
         );
     }
     await task.deleteOne();
-    return res.clinical(200, 'Clinical care task removed successfully.', task);
+    return res.status(204).end();
 });
 
 module.exports = router;

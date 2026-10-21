@@ -118,7 +118,7 @@ router.delete('/:id', async (req, res) => {
         { $set: { assignedUser: '', assignedUserName: 'unassigned' } },
     );
     await user.deleteOne();
-    return res.clinical(200, 'Clinician record removed and assigned care tasks released.', user);
+    return res.status(204).end();
 });
 
 module.exports = router;

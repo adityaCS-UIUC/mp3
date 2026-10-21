@@ -51,6 +51,14 @@ function responseDouble() {
     return {
         result,
         response: {
+            status(status) {
+                result.status = status;
+                return this;
+            },
+            end() {
+                result.ended = true;
+                return this;
+            },
             clinical(status, message, data) {
                 Object.assign(result, { status, message, data });
                 return this;
@@ -225,7 +233,9 @@ describe('Llama.io Care API foundation', () => {
         try {
             const { response, result } = responseDouble();
             await routeHandler(taskRouter, 'delete', '/:id')({ params: { id } }, response);
-            assert.equal(result.status, 200);
+            assert.equal(result.status, 204);
+            assert.equal(result.ended, true);
+            assert.equal(result.data, undefined);
             assert.deepEqual(userUpdate, [
                 { _id: userId },
                 { $pull: { pendingTasks: id } },
@@ -251,7 +261,9 @@ describe('Llama.io Care API foundation', () => {
         try {
             const { response, result } = responseDouble();
             await routeHandler(userRouter, 'delete', '/:id')({ params: { id } }, response);
-            assert.equal(result.status, 200);
+            assert.equal(result.status, 204);
+            assert.equal(result.ended, true);
+            assert.equal(result.data, undefined);
             assert.deepEqual(taskUpdate, [
                 { assignedUser: id },
                 { $set: { assignedUser: '', assignedUserName: 'unassigned' } },
