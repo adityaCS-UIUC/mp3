@@ -2,12 +2,17 @@
 ### Due: Tuesday, Nov 3, 2026, 11:59PM CT
 
 ## Table of Contents
-1. [Assignment](#1-assignment)
-2. [Getting Started](#2-getting-started)
-3. [Tips](#3-tips)
-4. [Grading](#grading) and [Self-check](#self-check-with-submitjs)
-5. [Rules](#rules)
-6. [Submission Details](#submission-details)
+1. [Project Overview](#project-overview)
+2. [Assignment](#1-assignment)
+3. [Getting Started](#2-getting-started)
+4. [Tips](#3-tips)
+5. [Grading](#grading) and [Self-check](#self-check-with-submitjs)
+6. [Rules](#rules)
+7. [Submission Details](#submission-details)
+
+## Project Overview
+
+Llama.io Care is a REST API for managing staff and clinical care tasks in a medical facility. Users represent healthcare personnel, while tasks represent assignments such as medication rounds, patient checks, and clinical follow-ups. The API supports task assignment, completion tracking, filtering, and synchronized relationships between staff members and their pending tasks.
 
 ## 1. Assignment
 
