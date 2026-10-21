@@ -1,11 +1,11 @@
-module.exports = function (router) {
+const express = require('express');
 
-    var homeRoute = router.route('/');
+const router = express.Router();
 
-    homeRoute.get(function (req, res) {
-        var connectionString = process.env.TOKEN;
-        res.json({ message: 'My connection string is ' + connectionString });
+router.get('/', (req, res) => {
+    return res.clinical(200, 'Llama.io Care clinical ward API is operational.', {
+        service: 'llama-io-care',
     });
+});
 
-    return router;
-}
+module.exports = router;

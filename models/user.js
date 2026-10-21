@@ -1,10 +1,30 @@
-// Load required packages
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-// Define our user schema
-var UserSchema = new mongoose.Schema({
-    name: String
+const requiredText = {
+    type: String,
+    required: true,
+    trim: true,
+    validate: {
+        validator: (value) => value.length > 0,
+        message: 'A non-empty value is required.',
+    },
+};
+
+const userSchema = new mongoose.Schema({
+    name: requiredText,
+    email: {
+        ...requiredText,
+        unique: true,
+    },
+    pendingTasks: {
+        type: [String],
+        default: [],
+    },
+    dateCreated: {
+        type: Date,
+        default: Date.now,
+        immutable: true,
+    },
 });
 
-// Export the Mongoose model
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', userSchema);

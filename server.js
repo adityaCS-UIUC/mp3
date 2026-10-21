@@ -1,36 +1,43 @@
-// Get the packages we need
-var express = require('express'),
-    router = express.Router(),
-    mongoose = require('mongoose');
+const express = require('express');
+const mongoose = require('mongoose');
+const { errorHandler, notFound, responseEnvelope } = require('./middleware/response');
 
-// Read .env file
 require('dotenv').config();
 
-// Create our Express application
-var app = express();
+const app = express();
 
-// Use environment defined port or 3000
-var port = process.env.PORT || 3000;
-
-// Connect to a MongoDB --> Uncomment this once you have a connection string!!
-//mongoose.connect(process.env.MONGODB_URI).catch(function (err) { console.error('MongoDB connection error:', err.message); });
-
-// Allow CORS so that backend and frontend could be put on different servers
-var allowCrossDomain = function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
-    res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+app.use(responseEnvelope);
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
     next();
-};
-app.use(allowCrossDomain);
-
-// Parse URL-encoded and JSON request bodies
+});
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Use routes as a module (see index.js)
-require('./routes')(app, router);
+require('./routes')(app);
 
-// Start the server
-app.listen(port);
-console.log('Server running on port ' + port);
+app.use(notFound);
+app.use(errorHandler);
+
+async function startServer() {
+    if (!process.env.MONGODB_URI) {
+        throw new Error('MONGODB_URI must be configured for the MongoDB Atlas database.');
+    }
+
+    await mongoose.connect(process.env.MONGODB_URI);
+    const port = process.env.PORT || 3000;
+    return app.listen(port, () => {
+        console.log(`Llama.io Care API listening on port ${port}`);
+    });
+}
+
+if (require.main === module) {
+    startServer().catch((error) => {
+        console.error('Unable to start the clinical API:', error.message);
+        process.exitCode = 1;
+    });
+}
+
+module.exports = { app, startServer };

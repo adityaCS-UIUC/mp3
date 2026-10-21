@@ -163,7 +163,7 @@ A task is *pending* if it is not completed. Every pending task that is assigned 
 `cp .env.example .env`
 5. Install dependencies:
 `npm install`
-6. Uncomment the `mongoose.connect(...)` line in `server.js`, then start the dev server:
+6. Set `MONGODB_URI` in `.env`, then start the server (the application connects to Atlas before accepting requests):
 `npm start`
 7. Deploy your API (see Tips) and check it with the autograder, see [Grading](#grading) and [Self-check with `submit.js`](#self-check-with-submitjs).
 
